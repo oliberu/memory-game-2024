@@ -1,0 +1,230 @@
+/* Reset CSS */
+* {
+    border: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    background: transparent;
+    /* "inherit" permet de retrouver la couleur donnée par héritage */
+    color: inherit;
+}
+
+
+/* Variables */
+:root {
+    /*
+    On crée des variables qui contiennent les couleurs du thème
+    */
+    --couleur-fond: #149FC2;
+    --couleur-victoire: #97BF04;
+    --couleur-texte: #FBE963;
+    --bordure-carte: #97BF04;
+    --bordure-bouton: #F21D1D;
+    --fond-bouton: #A60303;
+    --fond-bouton-actif: #F21D1D;
+}
+
+
+/* Style des pages */
+body {
+    /* donner la couleur de fond de l'élément */
+    /* var(--nom-de-variable) permet de rappeler une variable crée plus haut */
+    background-color: var(--couleur-fond);
+
+    /*
+    Toutes les propriétés liées à la police sont automatiquement
+    propagées à tous les éléments enfants de l'élément actuel (body dans ce cas)
+    */
+    /* changement de la coleur du texte */
+    color: var(--couleur-texte);
+
+    /* Active le système flex box pour les enfants directs de <body> */
+    display: flex;
+    /* Change la direction de flexbox en mode vertical */
+    flex-direction: column;
+
+    /* changement du type de police */
+    font-family: sans-serif;
+
+    /*
+        vh = "viewport height"
+        100vh = 100% de la hauteur de la zone d'affichage
+    */
+    height: 100vh;
+
+    /* Pour un effet de perspective on donne la distance entre la surface de l'écran et l'oeil */
+    perspective: 2000px;
+    /*
+        On règle ici les coordonnées x et y du point de fuite (l'endroit ou l'oeil regarde)
+        par défaut c'est au centre
+    */
+    perspective-origin: 65% 35%;
+}
+
+h1 {
+    /* hauteur du M majuscule */
+    font-size: 48px;
+    /* marge du bas */
+    margin-bottom: 25px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+/* Afficher / masquer */
+.hidden {
+    /* Annuler l'affichage d'un élément */
+    /* !important permet de rendre ultra prioritaire */
+    display: none !important;
+}
+
+/* Boutons */
+.btn {
+    /* couleur de fond */
+    background-color: var(--fond-bouton);
+    /*
+    bordure du bouton :
+    - 2px = épaisseur
+    - solid = style en trait plein
+    - var... = couleur (associée à une variable dans notre cas)
+    */
+    border: 2px solid var(--bordure-bouton);
+    /* arrondi des coins */
+    border-radius: 3px;
+    /* 
+        1ere valeur: top/bottom
+        2eme valeur: right/left
+    */
+    /* Curseur de la souris */
+    cursor: pointer;
+    padding: 7px 10px;
+    /* permet de créer une animation sur la couleur de fond lorsqu'elle change */
+    transition: background 300ms cubic-bezier(0.39, 0.58, 0.13, 1);
+}
+
+/* Bouton survolé par la souris */
+.btn:hover {
+    background-color: var(--fond-bouton-actif);
+}
+
+/* Barre de titre */
+.top-bar {
+    padding: 15px;
+    /* centrage du texte */
+    text-align: center;
+}
+
+/* Zone de jeu */
+.game-zone {
+    /*
+    demande à .game-zone d'occuper la place restante disponible dans <body>
+    Ne fonctionne que parceque .game-zone est un enfant du systeme flex-box activé sur <body>
+    */
+    flex-grow: 1;
+}
+
+/* Panneau Victoire */
+.win-panel {
+    /* Aligne "verticalement" la <div> qui est dans .win-panel */
+    align-items: center;
+    background-color: var(--couleur-victoire);
+    display: flex;
+    height: 100%;
+    /* Aligne "horizontalement" la <div> qui est dans .win-panel */
+    justify-content: center;
+    text-align: center;
+}
+
+.win-title {
+    font-size: 52px;
+    margin-bottom: 20px;
+}
+
+.win-subtitle {
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+/* Plateau */
+.deck {
+    display: flex;
+    /* activation du retour à la ligne */
+    flex-wrap: wrap;
+    /* espace entre les éléments du flex */
+    gap: 10px;
+    /* centrage lorsque le deck est plus petit que l'écran */
+    margin: 0 auto;
+    /* 5 cartes (5 * 150px) + 4 espaces de 10px */
+    width: 790px;
+}
+
+/* Cartes */
+.card {
+    /* hauteur */
+    height: 150px;
+    position: relative;
+    /* largeur */
+    width: 150px;
+    transform: rotateY(0);
+    transition: transform 300ms linear;
+}
+
+/* Tous les <div> directement dans <div class="card"> */
+.card > div {
+    /*
+        propriété du fond:
+        - couleur -> var(--couleur-fond)
+        - addresse de l'image -> url('chemin vers image')
+        - position x y de l'image dans .back -> center/TailleImage
+        - Taille de l'image importée (en pixels ou "cover" ou "contain")
+            - cover -> l'image est recadrée de manière à remplir .back
+            - contain -> l'image est réduite de façon à la voir en entier
+        - répétition de remplisage -> no-repeat (aucune)
+    */
+    background: var(--couleur-fond) center/cover no-repeat;
+    border: 2px solid var(--bordure-carte);
+    border-radius: 3px;
+    left: 0;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    transition: z-index 300ms linear;
+    width: 100%;
+}
+
+    .card > div.image {
+        /* Cette ligne sera ajoutée directement par JS en fonction du numéro de la carte */
+        /* background-image: url('./cards/card-10.jpg'); */
+        transform: rotateY(180deg);
+        z-index: 1;
+    }
+
+    .card > div.back {
+        background-image: url('./cards/back.jpg');
+        z-index: 2;
+    }
+
+/* Version retournée */
+/* possède à la fois la class "card" et " la class "flipped" */
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+    /* possède la class "image" et se trouve à l'intérieur de quelque chose avec la class "flipped" */
+    .card.flipped > div.image {
+        z-index: 2;
+    }
+
+    .card.flipped > div.back {
+        z-index: 1
+    }
